@@ -451,7 +451,18 @@ text-align: center;
 .file-download-btn:hover{
     color: white;
 }
+.tr-green{
+    background: #06C00D;
+    color: white !important;
+}
+.tr-green td,.tr-red td{
+     
+    color: white !important;
+}
 
+.tr-red{
+    background-color: #ff0000;
+}
 .dash-card-single{
     border-radius: 8px !important;
     align-items: center;

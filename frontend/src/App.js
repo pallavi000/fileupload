@@ -15,6 +15,7 @@ import FileUpload from "./components/layouts/FileUpload";
 import Transaction from "./components/layouts/Transaction";
 import Download from "./components/layouts/Download";
 import Upload from "./components/layouts/Upload";
+import Report from "./components/layouts/Report";
 
 axios.defaults.baseURL="http://localhost:5000/api"
 
@@ -50,6 +51,9 @@ function App() {
     </Route>
     <Route exact path="/upload" element={<Protected/>}>
         <Route exact path="/upload" element={<Upload/>}/>
+    </Route>
+    <Route exact path="/report" element={<Protected/>}>
+        <Route exact path="/report" element={<Report/>}/>
     </Route>
     </Routes>
     <Footer/>

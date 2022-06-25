@@ -5,10 +5,16 @@ const File = require('../Model/File')
 const { v4: uuidv4 } = require('uuid');
 
 
-router.get('/',auth,async(req,res)=>{
+router.post('/',auth,async(req,res)=>{
     try {
-        const files = await File.find().sort('-_id')
-        res.send(files)
+
+        const pageno = req.body.pageno-1
+        const itemsCountPerPage = req.body.itemsCountPerPage
+
+        const files = await File.find({user_id:req.user._id}).sort('-_id').skip(pageno*itemsCountPerPage).limit(itemsCountPerPage)
+        const totalitems  = await File.countDocuments({user_id:req.user._id})
+
+        res.send({files,totalitems})
         
     } catch (error) {
         res.status(500).send(error.message)
@@ -108,6 +114,34 @@ router.delete('/:id',auth,async(req,res)=>{
     }
 })
 
+
+
+router.post('/report/generate',auth,async(req,res)=>{
+    try {
+        const pageno = req.body.pageno-1
+        const itemsCountPerPage = req.body.itemsCountPerPage
+
+
+        const files= await File.find({user_id:req.user._id}).sort('-_id').skip(pageno*itemsCountPerPage).limit(itemsCountPerPage)
+        const totalitems  = await File.countDocuments({user_id:req.user._id})
+        const topdownload = await File.find({user_id:req.user._id}).sort('download_counts').limit(5)
+        const toprevenue = await File.find({user_id:req.user._id}).sort('revenue').limit(5)
+        res.send({files,topdownload,toprevenue,totalitems})
+        
+    } catch (error) {
+        res.status(500).send(error.message)
+    }
+})
+
+router.post('/search',auth,async(req,res)=>{
+    try {
+        const files = await File.find({name:{ $regex: '.*' + req.body.input + '.*' }})
+        res.send(files) 
+        
+    } catch (error) {
+        res.status(500).send(error.message)
+    }
+})
 
 
 module.exports= router

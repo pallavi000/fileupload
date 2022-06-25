@@ -1,9 +1,21 @@
 import axios from 'axios'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
+import Pagination from "react-js-pagination";
+
 
 function FileUpload() {
   const [files,setFiles] = useState([])
+  const call = useRef()
+
+  const[pageno,setPageno] = useState(1)
+  const[itemsCountPerPage,setItemCountPerPage] = useState(12)
+  const[totalItemsCount,setTotalItemsCount] = useState(0)
+
+
+  function paginate(pageno){
+      setPageno(pageno)
+  }
 
 
   const config={
@@ -15,13 +27,21 @@ function FileUpload() {
 useEffect(() => {
   getFile()
  
-}, [])
+}, [pageno])
+
 
 async function getFile(){
   try {
-    const response = await axios.get('/file',config)
-    console.log(response.data)
-    setFiles(response.data)
+    const data={
+      pageno,
+      itemsCountPerPage
+  }
+    const response = await axios.post('/file',data,config)
+    console.log(response.data.files)
+    setFiles(response.data.files)
+    
+    setTotalItemsCount(response.data.totalitems)
+
   } catch (error) {
     console.log(error.request.response)
   }
@@ -51,6 +71,26 @@ function formatBytes(bytes, decimals = 2) {
 }
 
 
+async function search(e){
+  if(call.current){
+      clearTimeout(call.current)
+  }
+
+  call.current= setTimeout(async() => {
+    try {
+      const data={
+        input:e.target.value
+      }
+
+      const response = await axios.post('/file/search',data,config)
+        console.log(response.data)
+      setFiles(response.data)
+    } catch (error) {
+      console.log(error.request.response)
+    }
+  }, 2000);
+
+}
 
 
   return (
@@ -61,7 +101,7 @@ function formatBytes(bytes, decimals = 2) {
           <h3>Files</h3>
             <div className='row'>
                 <div className='file-search-box'>
-                <i class="fa-solid fa-magnifying-glass"></i> <input type="text" placeholder='Search by name...'></input>
+                <i class="fa-solid fa-magnifying-glass"></i> <input type="text" onChange={(e)=>search(e)} placeholder='Search by name...'></input>
                 </div>
                 <Link className='btn-upload-file' to="/upload">Upload File</Link>
             </div>
@@ -101,8 +141,21 @@ function formatBytes(bytes, decimals = 2) {
             </table>
             </div>
           </div>
-        </div>
+          <div className='d-flex justify-content-end mr-4'>
 
+         
+<Pagination
+activePage={pageno}
+itemsCountPerPage={itemsCountPerPage}
+totalItemsCount={totalItemsCount}
+pageRangeDisplayed={5}
+onChange={(e)=>paginate(e)}
+itemClass="page-item"
+linkClass="page-link"
+/>
+</div>
+        </div>
+       
 
     </div>
   )

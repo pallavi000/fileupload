@@ -26,8 +26,6 @@ getData()
 
 
 
-
-
   return (
     <div className='content-wrapper'>
 <div className='table-card card'>

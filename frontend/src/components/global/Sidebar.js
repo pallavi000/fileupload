@@ -90,7 +90,7 @@ const navigate = useNavigate();
    </li>
 
    <li>
-     <Link to="/admin/user-subscription">
+     <Link to="/report">
       <i class="fa fa-th" aria-hidden="true"></i>
        <span class="links_name">Report</span>
      </Link>
