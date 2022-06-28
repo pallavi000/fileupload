@@ -2,9 +2,12 @@ import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import profile from '../../../images/profile.png'
+import { Oval } from  'react-loader-spinner'
+
 
 function Profile() {
     const[user,setUser]= useState({})
+    const [is_loader,setIs_loader] = useState(true)
 
 useEffect(() => {
  getUser()
@@ -20,10 +23,12 @@ async function getUser(){
     try {
         const response = await axios.get('/user/current/user',config)
         console.log(response.data)
+        setIs_loader(false)
         setUser(response.data)
         
     } catch (error) {
         console.log(error.request.response)
+        setIs_loader(false)
         
     }
 }
@@ -31,6 +36,15 @@ async function getUser(){
 
 
   return (
+    is_loader?(
+        <Oval
+        height="100"
+        width="100"
+        color='#94142C'
+        ariaLabel='loading'
+        secondaryColor="#ddd"
+      />
+      ):(
     <div className='content-wrapper'>
     <div className=' container-fluid'>
         <div className='profile-header d-flex align-items-center justify-content-between'>
@@ -55,7 +69,13 @@ async function getUser(){
                         </div>
                     </div>
                     <div className='col-md-8 profile-image'>
+                    {user.image?(
+                        <img src={user.image} className="img-fluid"/>
+
+                    ):(
                         <img src={profile} className="img-fluid"/>
+
+                    )}
                     </div>
                 </div>
             
@@ -83,6 +103,7 @@ async function getUser(){
             </div>
         </div>
     </div>
+      )
   )
 }
 

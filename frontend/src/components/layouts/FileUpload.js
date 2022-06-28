@@ -2,11 +2,14 @@ import axios from 'axios'
 import React, { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import Pagination from "react-js-pagination";
+import { Oval } from  'react-loader-spinner'
+
 
 
 function FileUpload() {
   const [files,setFiles] = useState([])
   const call = useRef()
+  const [is_loader,setIs_loader] = useState(true)
 
   const[pageno,setPageno] = useState(1)
   const[itemsCountPerPage,setItemCountPerPage] = useState(12)
@@ -39,15 +42,17 @@ async function getFile(){
     const response = await axios.post('/file',data,config)
     console.log(response.data.files)
     setFiles(response.data.files)
+    setIs_loader(false)
     
     setTotalItemsCount(response.data.totalitems)
 
   } catch (error) {
     console.log(error.request.response)
+    setIs_loader(false)
   }
 }
 
-async function distroy(id){
+async function distroy(e,id){
   try {
     const response = await axios.delete('/file/'+id,config)
     console.log(response.data)
@@ -94,6 +99,15 @@ async function search(e){
 
 
   return (
+    is_loader?(
+      <Oval
+      height="100"
+      width="100"
+      color='#94142C'
+      ariaLabel='loading'
+      secondaryColor="#ddd"
+    />
+    ):(
     <div className='content-wrapper'>
 <div className='table-card card'>
           <div className='card-body table-responsive'>
@@ -158,6 +172,7 @@ linkClass="page-link"
        
 
     </div>
+    )
   )
 }
 

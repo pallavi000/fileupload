@@ -8,7 +8,7 @@ const userSchema = new mongoose.Schema({
     lastname:{type:String},
     country:{type:String},
     gender:{type:String},
-    activationkey:{type:String,required:true},
+    activationkey:{type:String},
     endtime:{type:String,default:today()},
     trn_date:{type:String,default:today()},
     referrallink:{type:String},

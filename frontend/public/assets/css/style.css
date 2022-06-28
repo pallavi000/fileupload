@@ -642,3 +642,19 @@ box-shadow: 0px 4px 9px rgba(0, 0, 0, 0.1), 0px 8px 53px rgba(0, 120, 240, 0.25)
     width: 55%;
     padding: 3rem !important;
 }
+
+div[data-testid="oval-loading"]{
+    padding: 3px;
+    height: 100vh;
+    /* margin: auto; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .profile-image img{
+    height: 128px;
+    width: 128px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 1px solid #c4c4c4;
+  }

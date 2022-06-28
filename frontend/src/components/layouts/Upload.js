@@ -4,6 +4,8 @@ import upload from '../../images/upload.png'
 import $ from 'jquery'
 import FileUploadProgress  from 'react-fileupload-progress'
 import Progress from '../ui/Progress'
+import * as toastr from 'toastr';
+import '../../../node_modules/toastr/build/toastr.css'
 
 function Upload() {
     const[file,setFile] = useState('')
@@ -29,6 +31,7 @@ function Upload() {
             }
             const response = await axios.post('/file/upload',data, config)
             transferComplete()
+            toastr.success('Success!!')
 
             // var oReq = new XMLHttpRequest();
             // oReq.addEventListener("error", transferFailed);
@@ -46,6 +49,7 @@ function Upload() {
                 
                 
             }
+            toastr.error(error.request.response,'Error')
             setFileList(newFileList)
 
         }

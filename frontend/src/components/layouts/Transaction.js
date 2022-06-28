@@ -1,8 +1,11 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
+import { Oval } from  'react-loader-spinner'
+
 
 function Transaction() {
   const[transactions,setTransactions] = useState([])
+  const [is_loader,setIs_loader] = useState(true)
 
   useEffect(()=>{
 getData()
@@ -18,15 +21,26 @@ getData()
     try {
       const transactions = await axios.get('/withdraw',config)
       setTransactions(transactions.data)
+      setIs_loader(false)
       
     } catch (error) {
       console.log(error.request.response)
+      setIs_loader(false)
     }
   }
 
 
 
   return (
+    is_loader?(
+      <Oval
+      height="100"
+      width="100"
+      color='#94142C'
+      ariaLabel='loading'
+      secondaryColor="#ddd"
+    />
+    ):(
     <div className='content-wrapper'>
 <div className='table-card card'>
           <div className='card-body table-responsive'>
@@ -77,6 +91,7 @@ getData()
 
 
     </div>
+    )
   )
 }
 

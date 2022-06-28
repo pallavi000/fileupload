@@ -16,6 +16,10 @@ import Transaction from "./components/layouts/Transaction";
 import Download from "./components/layouts/Download";
 import Upload from "./components/layouts/Upload";
 import Report from "./components/layouts/Report";
+import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
+import EditFile from "./components/layouts/EditFile";
+import ChangePassword from "./components/auth/ChangePassword";
+
 
 axios.defaults.baseURL="http://localhost:5000/api"
 
@@ -54,6 +58,12 @@ function App() {
     </Route>
     <Route exact path="/report" element={<Protected/>}>
         <Route exact path="/report" element={<Report/>}/>
+    </Route>
+    <Route exact path="/edit-file/:id" element={<Protected/>}>
+        <Route exact path="/edit-file/:id" element={<EditFile/>}/>
+    </Route>
+    <Route exact path="/change-password" element={<Protected/>}>
+        <Route exact path="/change-password" element={<ChangePassword/>}/>
     </Route>
     </Routes>
     <Footer/>

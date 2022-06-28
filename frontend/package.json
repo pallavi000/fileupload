@@ -13,8 +13,10 @@
     "react-dom": "^18.2.0",
     "react-fileupload-progress": "^0.5.0",
     "react-js-pagination": "^3.0.3",
+    "react-loader-spinner": "^5.1.5",
     "react-router-dom": "^6.3.0",
     "react-scripts": "5.0.1",
+    "toastr": "^2.1.4",
     "web-vitals": "^2.1.4"
   },
   "scripts": {

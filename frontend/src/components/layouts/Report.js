@@ -3,6 +3,8 @@ import React, { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import * as echarts from 'echarts';
 import Pagination from "react-js-pagination";
+import { Oval } from  'react-loader-spinner'
+
 
 
 
@@ -12,6 +14,7 @@ function Report() {
     const[revenue,setRevenue] = useState([])
     const[input,setInput] = useState('')
     const call = useRef()
+    const [is_loader,setIs_loader] = useState(true)
 
     const[pageno,setPageno] = useState(1)
     const[itemsCountPerPage,setItemCountPerPage] = useState(12)
@@ -56,10 +59,13 @@ function Report() {
                 newarr.push({'value':rev.revenue,'name':rev.name})
             }
             setRevenue(newarr)
+            setIs_loader(false)
+
           
             
         } catch (error) {
             console.log(error.request.response)
+            setIs_loader(false)
         }
     }
     
@@ -79,9 +85,12 @@ function Report() {
 // piechart
 
 useEffect(()=>{
+  if(!is_loader){
     makepiechart()
     revenue_piechart()
-    },[data,revenue])
+  }
+
+  },[data,revenue])
     
 
 function makepiechart(){
@@ -201,6 +210,15 @@ async  function search(e){
 
       
   return (
+    is_loader?(
+      <Oval
+      height="100"
+      width="100"
+      color='#94142C'
+      ariaLabel='loading'
+      secondaryColor="#ddd"
+    />
+    ):(
     <div className='content-wrapper'>
     <div className='row'>
     <div className='col-md-6 col-sm-12'>
@@ -303,7 +321,7 @@ async  function search(e){
          </div>
         </div>
     </div>
-   
+    )
   )
 }
 

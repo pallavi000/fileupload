@@ -117,18 +117,53 @@ router.get('/current/user',auth,async(req,res)=>{
 
 router.post('/edit-profile/:id',auth,async(req,res)=>{
     try {
-        var picture=''
-        const user= await User.findByIdAndUpdate(req.params.id,{
-            email:req.body.email,
-            firstname:req.body.firstname,
-            lastname:req.body.lastname,
-            country:req.body.country,
-            gender:req.body.gender,
-            image:picture
+        const user = await  User.findById(req.user._id)
+        if(user){
+            if(req.files.image){
+                var file=req.files.image
 
-        },{new:true})
-       res.send(user)
-        
+                var r = Math.random()
+                r = r.toString().replace('.','-')
+               
+                const fileName = new Date().getDate()+r+'.'+file.name.split('.').pop()
+                const uploadPath = process.env.FILE_UPLOAD_PATH+'/'+fileName    
+                file.mv(uploadPath,function(error){
+                    if(error){
+                        is_error= error
+                        console.log(error)
+                    }
+                })
+                picture = '/assets/files/'+fileName
+                user.image = picture
+            }
+            user.email=req.body.email
+            user.firstname=req.body.firstname
+            user.lastname=req.body.lastname
+            user.country=req.body.country
+            user.gender=req.body.gender
+            await user.save()
+            res.send(user)
+        } else {
+            res.status(400).send('User not found.')
+        } 
+    } catch (error) {
+        res.status(500).send(error.message)
+    }
+})
+
+router.post('/change-password',auth,async(req,res)=>{
+    try {
+        const user = await User.findById(req.user._id)
+           if(req.body.newpassword==req.body.confirmpassword){
+            const salt = await bcrypt.genSalt(10)
+            const hashPassword = await bcrypt.hash(req.body.newpassword,salt)
+            
+            user.password = hashPassword
+            await user.save()
+            res.send(user)
+           }else{
+            res.status(400).send('Password did not match')
+           }
     } catch (error) {
         res.status(500).send(error.message)
     }

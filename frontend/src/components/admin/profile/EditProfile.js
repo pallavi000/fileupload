@@ -1,6 +1,8 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
+import * as toastr from 'toastr';
+import '../../../../node_modules/toastr/build/toastr.css'
 
 function EditProfile() {
     const [user,setUser] = useState({})
@@ -58,9 +60,12 @@ function EditProfile() {
            
             const response = await axios.post('/user/edit-profile/'+params.id,data,config)
             console.log(response.data)
+            toastr.success('Success!!')
+            navigate(-1)
             
         } catch (error) {
             console.log(error.request.response)
+            toastr.error(error.request.response,'Error')
         }
        
     }
@@ -107,6 +112,10 @@ function EditProfile() {
                 </div>
                 <div className='form-group d-flex'>
                     <input type="text" class="username" defaultValue={user.country} onChange={(e)=>setCountry(e.target.value)} placeholder="Country" required/>
+                </div>
+
+                <div className='form-group d-flex'>
+                    <input type="file" class="username"  onChange={(e)=>setImage(e.target.files[0])} placeholder="Upload Profile Image" required/>
                 </div>
                 <button className='btn-signin' type="submit">Update</button>
             </form>

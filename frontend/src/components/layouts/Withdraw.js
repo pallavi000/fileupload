@@ -1,5 +1,7 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
+import * as toastr from 'toastr';
+import '../../../node_modules/toastr/build/toastr.css'
 
 function Withdraw() {
     const[amount,setAmount]= useState(0)
@@ -16,7 +18,7 @@ function Withdraw() {
     async function submitWithdraw(e){
         e.preventDefault()
         if(amount>balance){
-            alert('Amount can not be greater than Balance')
+            toastr.error('Amount can not be greater than Balance')
             return false
         }
         try {
@@ -28,9 +30,11 @@ function Withdraw() {
             }
             const response = await axios.post('/withdraw',data,config)
             console.log(response.data)
+            toastr.success('Success')
             
         } catch (error) {
             console.log(error.request.response)
+            toastr.error(error.request.response,'Error')
         }
     }
 

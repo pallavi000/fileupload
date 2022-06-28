@@ -79,13 +79,26 @@ router.post('/upload',auth,async(req,res)=>{
    
 })
 
-router.get('/:id',async(req,res)=>{
+router.get('/:id',auth,async(req,res)=>{
     try {
         const file = await File.findById(req.params.id)
         res.send(file)
     } catch (error) {
         res.status(500).send(error.message)
     }
+})
+
+router.put('/:id',auth,async(req,res)=>{
+    try {
+        const file =await  File.findByIdAndUpdate(req.params.id,{
+            name:req.body.name
+        },{new:true})
+        res.send(file)
+
+    } catch (error) {
+        res.status(500).send(error.message)
+    }
+   
 })
 
 router.get('/download/:id',async(req,res)=>{
@@ -135,7 +148,7 @@ router.post('/report/generate',auth,async(req,res)=>{
 
 router.post('/search',auth,async(req,res)=>{
     try {
-        const files = await File.find({name:{ $regex: '.*' + req.body.input + '.*' }})
+        const files = await File.find({user_id:req.user._id,name:{ $regex: '.*' + req.body.input + '.*' }})
         res.send(files) 
         
     } catch (error) {

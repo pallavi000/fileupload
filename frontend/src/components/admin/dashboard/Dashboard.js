@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import icon from '../../../images/ring.png'
 import axios from 'axios'
+import { Oval } from  'react-loader-spinner'
+
 
 function Dashboard() {
  const[uploadFiles,setUploadFiles] = useState([])
@@ -9,6 +11,7 @@ function Dashboard() {
  const[totalDownloads,setTotalDownloads] = useState(0)
  const[earning,setEarning] = useState(0)
  const[balance,setBalance] =useState(0)
+ const [is_loader,setIs_loader] = useState(true)
 
  useEffect(()=>{
 getData()
@@ -30,9 +33,11 @@ getData()
     setBalance(response.data.balance)
     setEarning(response.data.earning)
     console.log(response.data)
+    setIs_loader(false)
     
   } catch (error) {
     console.log(error.request.response)
+    setIs_loader(false)
   }
  }
 
@@ -53,6 +58,15 @@ getData()
 
 
   return (
+    is_loader?(
+      <Oval
+      height="100"
+      width="100"
+      color='#94142C'
+      ariaLabel='loading'
+      secondaryColor="#ddd"
+    />
+    ):(
     <div className="content-wrapper">
    <div class="dash-cards">
           <div class="dash-card-single yellow row">
@@ -174,6 +188,7 @@ getData()
           </div>
         </div>
     </div>
+    )
   )
 }
 
